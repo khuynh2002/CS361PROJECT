@@ -27,3 +27,4 @@ def request_player_information(player):
     process_response(process_response(response.text))
 
     return process_response
+

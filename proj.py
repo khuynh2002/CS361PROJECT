@@ -1,5 +1,7 @@
 import PySimpleGUI as sg
 import players
+from worldcup import get_winner
+from worldcup import get_matches
 
 
 sg.theme("DarkAmber")
@@ -58,7 +60,32 @@ def clubs_screen():
             break
     win.close()
 
+def world_cup():
+    layout = [
+        [sg.Button("Home"), sg.Button("Reset Search")],
+        [sg.Text("Year:"), sg.Input(key='-YEAR-', do_not_clear=True, size=(20, 1)), sg.Button('Search Winner') ],
+        [sg.Text("Nation:"), sg.Input(key='-NATION-', do_not_clear=True, size=(20, 1)), sg.Button('Search Matches')],
+        [sg.Text('', key='-OUT-',size=(20, 100))],
+    ]
 
+    win = sg.Window("World Cup Winners and Matches", layout, default_element_size=(45, 1), resizable=True, finalize=True)
+    while True:
+        event, values = win.read()
+        if event == "Home" or event == sg.WIN_CLOSED:
+            break
+        if event == 'Search Winner':
+            year = values["-YEAR-"]
+            # output = competition(year)
+            win['-OUT-'].update(get_winner(year))
+        if event == 'Search Matches':
+            year = values["-YEAR-"]
+            nation = values["-NATION-"]
+            # output = competition(year)
+            win['-OUT-'].update(get_matches(year, nation))
+
+
+
+    win.close()
 window1, window2 = home(), None
 
 
@@ -82,7 +109,7 @@ while True:
         clubs_screen()
 
     elif event == "Competitions":
-        sg.popup("Available soon. Click here for more information")
+        world_cup()
 
 window.close()
 
